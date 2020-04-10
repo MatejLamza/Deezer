@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Deezer</string>
+    <string name="music">Music</string>
+    <string name="made_for_you">Made for you</string>
+    <string name="music_by_genre">Music by genre</string>
+    <string name="placeholder_name">Gal Gadot</string>
+
+    <string name="ClosedDrawer">CloseDrawer</string>
+    <string name="OpenDrawer">OpenDrawer</string>
+    <string name="top_albums">Top Albums</string>
+    <string name="placeholder_album_name">Arose</string>
+    <string name="placeholder_album_artist">Artist: Eminem</string>
+    <string name="placeholder_album_tracks">Tracks: 14</string>
+
+    <string name="artist">Artist: </string>
+
+    <string-array name="drawerMenuOptions">
+        <item>Home</item>
+        <item>Albums</item>
+        <item>Playlists</item>
+        <item>Artists</item>
+        <item>Chart</item>
+        <item>Generes</item>
+    </string-array>
+</resources>

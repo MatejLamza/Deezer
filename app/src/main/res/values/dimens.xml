@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="const_padding">20dp</dimen>
+    <dimen name="const_padding_half">10dp</dimen>
+    <dimen name="main_item_size">120dp</dimen>
+    <dimen name="cornerRadius">8dp</dimen>
+    <dimen name="circular_image_maring">10dp</dimen>
+    <dimen name="circularIvDimens">90dp</dimen>
+    <dimen name="zeroDpDimens">0dp</dimen>
+
+    <!--Text-->
+    <dimen name="main_header_size">40sp</dimen>
+    <dimen name="small_header_size">25sp</dimen>
+    <dimen name="text_large_size">30sp</dimen>
+    <dimen name="smaller_rectangle_height">60dp</dimen>
+    <dimen name="item_album_dimension">100dp</dimen>
+    <dimen name="textsize_default">15sp</dimen>
+    <dimen name="small_padding">5dp</dimen>
+
+</resources>

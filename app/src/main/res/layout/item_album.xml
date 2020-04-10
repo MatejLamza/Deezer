@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@color/backgroundColorMain">
+
+    <androidx.cardview.widget.CardView
+        android:layout_margin="@dimen/const_padding"
+        android:layout_width="@dimen/item_album_dimension"
+        android:layout_height="@dimen/item_album_dimension"
+        app:cardCornerRadius="@dimen/cornerRadius">
+
+        <ImageView
+            android:id="@+id/ivAlbumCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/testimage" />
+
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvAlbumName"
+            android:layout_gravity="center"
+            android:text="@string/placeholder_album_name"
+            android:textSize="@dimen/small_header_size"
+            android:textColor="@color/white"
+            android:layout_marginBottom="@dimen/const_padding_half"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvAlbumArtist"
+            android:layout_marginStart="@dimen/const_padding"
+            android:layout_marginBottom="@dimen/small_padding"
+            android:text="@string/placeholder_album_artist"
+            android:textSize="@dimen/textsize_default"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvAlbumTracks"
+            android:text="@string/placeholder_album_tracks"
+            android:textSize="@dimen/textsize_default"
+            android:textColor="@color/white"
+            android:layout_marginStart="@dimen/const_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
