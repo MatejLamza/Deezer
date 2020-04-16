@@ -15,4 +15,5 @@ interface DeezerDataSource {
     suspend fun fetchPlaylist()
     suspend fun fetchTopAlbums()
     suspend fun fetchGenreByID(idGenre:Int)
+
 }

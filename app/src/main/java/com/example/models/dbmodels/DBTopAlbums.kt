@@ -8,8 +8,8 @@ const val CURRENT_TOP_ALBUMS_ID = 0
 
 @Entity(tableName = "top_albums")
 data class DBTopAlbums(
-    var listOfAlbums:List<AlbumData>,
-    var numberOfAlbums:Int
+    var listOfAlbums:List<AlbumData>?,
+    var numberOfAlbums:Int?
 ){
     @PrimaryKey(autoGenerate = false)
     var idTopAlbums = CURRENT_TOP_ALBUMS_ID

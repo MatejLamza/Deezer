@@ -3,6 +3,7 @@ package com.example.internals
 import com.example.models.*
 import com.example.models.dbmodels.DBTopAlbums
 import com.example.models.domain.*
+import kotlinx.coroutines.Deferred
 
 class ModelMapper {
     companion object {
@@ -56,7 +57,7 @@ class ModelMapper {
         }
 
         //Genre
-        fun mapNetworkGenreToGenreModel(networkGenre: NetworkGenre): Genre {
+        fun mapNetworkGenreToGenreModel(networkGenre: NetworkGenre):Genre {
             return Genre(
                 networkGenre.id,
                 networkGenre.name,
@@ -73,6 +74,7 @@ class ModelMapper {
             )
         }
 
+        //ERROR HERE
         fun mapDBTopAlbumsToAlbumModel(dbTopAlbums: DBTopAlbums): Album {
             return Album(
                 dbTopAlbums.listOfAlbums,

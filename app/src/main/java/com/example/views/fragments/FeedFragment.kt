@@ -2,6 +2,7 @@ package com.example.views.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.deezer.R
+import com.example.deezer.base.ScopedFragment
 import com.example.deezer.viewmodels.PlaylistViewModel
 import com.example.deezer.viewmodels.factories.PlaylistVMFactory
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.activity_feed.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class FeedFragment:Fragment() {
+class FeedFragment:ScopedFragment() {
 
     @Inject
     lateinit var factory: PlaylistVMFactory
@@ -41,30 +45,28 @@ class FeedFragment:Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.activity_feed,container,false)
-
         vm = ViewModelProvider(this,factory).get(PlaylistViewModel::class.java)
 
-//        showData()
-
-        vm.livePlaylists.observe(viewLifecycleOwner, Observer {
-            setImage(ivPlaylist1,it.data[0].picture)
-            setImage(ivPlaylist2,it.data[1].picture)
-        })
-
+        showData()
         return view
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+    }
+
     private fun showData(){
-        vm.data.observe(viewLifecycleOwner, Observer {
-            setImage(ivPlaylist1,it.data[3].picture)
-            setImage(ivPlaylist2,it.data[2].picture)
+        vm.livePlaylists.observe(viewLifecycleOwner, Observer {
+            setImage(ivPlaylist1, it.data!![0].picture!!)
+            setImage(ivPlaylist2,it.data!![1].picture!!)
         })
 
-        vm.genre.observe(viewLifecycleOwner, Observer {
-            setImage(ivGenre1,it.picture)
-            setImage(ivGenre2,it.picture)
-            tvGenre1.text = it.name
-            tvGenre2.text = it.name
+        vm.liveGenre.observe(viewLifecycleOwner, Observer {
+            setImage(ivGenre1,it[0].picture!!)
+            tvGenre1.text = it[0].name
+            setImage(ivGenre2,it[1].picture!!)
+            tvGenre2.text = it[1].name
         })
     }
 

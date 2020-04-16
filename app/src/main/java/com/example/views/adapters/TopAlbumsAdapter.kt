@@ -35,8 +35,8 @@ class TopAlbumsAdapter : RecyclerView.Adapter<TopAlbumsAdapter.TopAlbumsViewHold
         var album: AlbumData? = null
             set(value) {
                 field = value
-                itemView.tvAlbumName.text = album!!.title
-                itemView.tvAlbumArtist.text = album!!.artist.name
+                itemView.tvAlbumName.text = album?.title ?: "Temp Title"
+                itemView.tvAlbumArtist.text = album!!.artist?.name ?: "Artist Temp"
             }
     }
 }

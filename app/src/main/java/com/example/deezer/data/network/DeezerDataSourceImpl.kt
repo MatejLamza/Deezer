@@ -8,12 +8,13 @@ import com.example.deezer.utils.NoConnectivityException
 import com.example.models.NetworkAlbum
 import com.example.models.NetworkGenre
 import com.example.models.NetworkPlaylist
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 class DeezerDataSourceImpl
 @Inject constructor(val deezerService: DeezerService) : DeezerDataSource {
-
 
     private val _downloadedPlaylist = MutableLiveData<NetworkPlaylist>()
     private val _downloadedTopAlbums = MutableLiveData<NetworkAlbum>()
@@ -32,31 +33,33 @@ class DeezerDataSourceImpl
 
     override suspend fun fetchGenreByID(idGenre: Int) {
         try {
-            val fetchedGenre = deezerService.fetchGenreById(idGenre).await()
-            _downloadedGenre.postValue(fetchedGenre)
-        } catch (e:NoConnectivityException){
+            withContext(Dispatchers.IO){
+                val fetchedGenre = deezerService.fetchGenreById(idGenre).await()
+                _downloadedGenre.postValue(fetchedGenre)
+            }
+        } catch (e: NoConnectivityException) {
             Timber.d("Error fetching genre, no connection!")
         }
     }
 
     //TODO delete after debugging
     override suspend fun fetchTopAlbums() {
-       try {
-           val fetchedTopAlbums = deezerService.fetchTopAlbums().await()
-           Log.d("aaa","Fetched total of:  ${fetchedTopAlbums.total} albums")
-           _downloadedTopAlbums.postValue(fetchedTopAlbums)
-           Log.d("aaa","Posted albums to live data")
-       } catch (e:NoConnectivityException){
-           Timber.d("Error while fecthing Top Albums no connection!")
-       }
+        try {
+            withContext(Dispatchers.IO){
+                val fetchedTopAlbums = deezerService.fetchTopAlbums().await()
+                _downloadedTopAlbums.postValue(fetchedTopAlbums)
+            }
+        } catch (e: NoConnectivityException) {
+            Timber.d("Error while fecthing Top Albums no connection!")
+        }
     }
 
     override suspend fun fetchPlaylist() {
         try {
-            val fetchedNetworkPlaylist = deezerService.fetchPlaylists().await()
-            Log.d("aaa","Fetched total of:  ${fetchedNetworkPlaylist.total} playlists")
-            _downloadedPlaylist.postValue(fetchedNetworkPlaylist)
-            Log.d("aaa","Posted playists to live data variable")
+            withContext(Dispatchers.IO){
+                val fetchedNetworkPlaylist = deezerService.fetchPlaylists().await()
+                _downloadedPlaylist.postValue(fetchedNetworkPlaylist)
+            }
         } catch (e: NoConnectivityException) {
             //TODO Handle exception properly
             Timber.d("Error with connection!")
