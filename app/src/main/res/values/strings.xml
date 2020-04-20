@@ -13,6 +13,9 @@
     <string name="placeholder_album_tracks">Tracks: 14</string>
 
     <string name="artist">Artist: </string>
+    <string name="album_placeholder_name">The New Abnormal</string>
+    <string name="item_album_placeholder_artist">The Strokes</string>
+    <string name="album_tracks_placeholder_name">The Adults Are Talking</string>
 
     <string-array name="drawerMenuOptions">
         <item>Home</item>

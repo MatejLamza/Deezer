@@ -13,8 +13,14 @@ class TopAlbumsAdapter : RecyclerView.Adapter<TopAlbumsAdapter.TopAlbumsViewHold
 
     private var _albums: ArrayList<AlbumData> = arrayListOf()
 
+    private lateinit var _listener:OnAlbumClickListener
+
     fun loadAlbums(mAlbums:ArrayList<AlbumData>){
         _albums = mAlbums
+    }
+
+    fun setOnAlbumClickListener(listener:OnAlbumClickListener){
+        _listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopAlbumsViewHolder =
@@ -29,6 +35,10 @@ class TopAlbumsAdapter : RecyclerView.Adapter<TopAlbumsAdapter.TopAlbumsViewHold
         Glide.with(holder.itemView.context)
             .load(holder.album!!.cover)
             .into(holder.itemView.ivAlbumCover)
+
+        holder.itemView.item_album_container.setOnClickListener {
+            _listener.onAlbumClicked(_albums[position])
+        }
     }
 
     class TopAlbumsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,5 +48,9 @@ class TopAlbumsAdapter : RecyclerView.Adapter<TopAlbumsAdapter.TopAlbumsViewHold
                 itemView.tvAlbumName.text = album?.title ?: "Temp Title"
                 itemView.tvAlbumArtist.text = album!!.artist?.name ?: "Artist Temp"
             }
+    }
+
+    interface OnAlbumClickListener{
+        fun onAlbumClicked(album:AlbumData)
     }
 }

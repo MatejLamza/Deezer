@@ -1,6 +1,7 @@
 package com.example.views.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,24 +16,36 @@ import com.example.deezer.viewmodels.TopAlbumsViewModel
 import com.example.deezer.viewmodels.factories.TopAlbumsVMFactory
 import com.example.internals.AutoClearedValue
 import com.example.models.domain.Album.AlbumData
+import com.example.views.AlbumActivity
 import com.example.views.adapters.TopAlbumsAdapter
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class AlbumsFragment:Fragment() {
+
+const val EXTRA_ALBUM = "com.example.views.fragments.extra_album"
+
+
+class AlbumsFragment:Fragment(),TopAlbumsAdapter.OnAlbumClickListener {
 
     @Inject
     lateinit var factory:TopAlbumsVMFactory
-    private lateinit var vm:TopAlbumsViewModel
+    private val vm:TopAlbumsViewModel by lazy {
+        ViewModelProvider(this,factory).get(TopAlbumsViewModel::class.java)
+    }
 
     private var albums:ArrayList<AlbumData> = arrayListOf()
     private var adapter by AutoClearedValue<TopAlbumsAdapter>()
-
 
     companion object{
         fun newInstance():AlbumsFragment{
             return AlbumsFragment()
         }
+    }
+
+    override fun onAlbumClicked(album: AlbumData) {
+        val intent = Intent(activity?.applicationContext,AlbumActivity::class.java)
+        intent.putExtra(EXTRA_ALBUM,album)
+        startActivity(intent)
     }
 
     override fun onAttach(context: Context) {
@@ -48,8 +61,6 @@ class AlbumsFragment:Fragment() {
         val view = inflater.inflate(R.layout.fragment_albums,container,false)
         initRecylcerView(view)
 
-        vm = ViewModelProvider(this,factory).get(TopAlbumsViewModel::class.java)
-
         vm.albums.observe(viewLifecycleOwner, Observer {
             albums = it.data as ArrayList<AlbumData>
             adapter.loadAlbums(albums)
@@ -64,6 +75,7 @@ class AlbumsFragment:Fragment() {
         recyclerView.setHasFixedSize(true)
         val manager = LinearLayoutManager(activity!!.applicationContext)
         adapter = TopAlbumsAdapter()
+        adapter.setOnAlbumClickListener(this)
         recyclerView.layoutManager = manager
         recyclerView.adapter = adapter
     }

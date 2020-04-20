@@ -16,5 +16,7 @@
     <dimen name="item_album_dimension">100dp</dimen>
     <dimen name="textsize_default">15sp</dimen>
     <dimen name="small_padding">5dp</dimen>
+    <dimen name="album_img_margin_top">50dp</dimen>
+    <dimen name="album_dimens">160dp</dimen>
 
 </resources>

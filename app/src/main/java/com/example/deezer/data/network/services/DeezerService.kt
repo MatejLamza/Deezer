@@ -1,6 +1,7 @@
 package com.example.deezer.data.network.services
 
 import com.example.models.NetworkAlbum
+import com.example.models.NetworkAlbumTracks
 import com.example.models.NetworkGenre
 import com.example.models.NetworkPlaylist
 import kotlinx.coroutines.Deferred
@@ -18,4 +19,7 @@ interface DeezerService {
 
     @GET("genre/{idGenre}")
     fun fetchGenreById(@Path("idGenre")idGenre:Int):Deferred<NetworkGenre>
+
+    @GET("album/{idAlbum}/tracks")
+    fun fetchTracksForGivenAlbum(@Path("idAlbum")idAlbum:Int):Deferred<NetworkAlbumTracks>
 }

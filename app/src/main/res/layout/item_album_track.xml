@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/backgroundColorMain"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/IvalbumTrackName"
+        android:layout_margin="@dimen/const_padding"
+        android:text="@string/album_tracks_placeholder_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/small_header_size"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnPreview"
+        android:text="PREVIEW"
+        android:layout_marginBottom="@dimen/const_padding_half"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_marginLeft="@dimen/const_padding_half"
+        android:layout_marginRight="@dimen/const_padding_half"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+
+</LinearLayout>

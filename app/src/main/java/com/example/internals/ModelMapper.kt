@@ -3,49 +3,14 @@ package com.example.internals
 import com.example.models.*
 import com.example.models.dbmodels.DBTopAlbums
 import com.example.models.domain.*
-import kotlinx.coroutines.Deferred
 
 class ModelMapper {
     companion object {
-        //Playlist
-        private fun mapNetworkDataToDataModel(networkData: NetworkPlaylist.NetworkData): Playlist.Data {
-            return Playlist.Data(
-                networkData.title,
-                networkData.nbTracks,
-                networkData.picture,
-                networkData.tracklist
-            )
-        }
 
         fun mapNetworkPlaylistToPlaylistModel(networkPlaylist: NetworkPlaylist): Playlist {
             return Playlist(
                 mapListNetworkDataToListData(networkPlaylist.data),
                 networkPlaylist.total
-            )
-        }
-
-        private fun mapListNetworkDataToListData(listNetworkData: List<NetworkPlaylist.NetworkData>): List<Playlist.Data> =
-            listNetworkData.map { mapNetworkDataToDataModel(it) }
-
-        //TopAlbums
-        private fun mapNetworkArtistToArtist(networkArtist: NetworkAlbum.NetworkAlbumData.NetworkArtist): Album.AlbumData.Artist {
-            return Album.AlbumData.Artist(
-                networkArtist.name,
-                networkArtist.picture,
-                networkArtist.link,
-                networkArtist.tracklist
-            )
-        }
-
-        private fun mapListNetworkAlbumDataToListAlbumData(listAlbum: List<NetworkAlbum.NetworkAlbumData>): List<Album.AlbumData> =
-            listAlbum.map { mapNetworkDataToAlbumData(it) }
-
-        private fun mapNetworkDataToAlbumData(networkAlbumData: NetworkAlbum.NetworkAlbumData): Album.AlbumData {
-            return Album.AlbumData(
-                networkAlbumData.title,
-                networkAlbumData.cover,
-                networkAlbumData.tracklist,
-                mapNetworkArtistToArtist(networkAlbumData.artist)
             )
         }
 
@@ -56,14 +21,66 @@ class ModelMapper {
             )
         }
 
-        //Genre
-        fun mapNetworkGenreToGenreModel(networkGenre: NetworkGenre):Genre {
+        fun mapNetworkGenreToGenreModel(networkGenre: NetworkGenre): Genre {
             return Genre(
                 networkGenre.id,
                 networkGenre.name,
                 networkGenre.picture
             )
         }
+
+        fun mapNetworkAlbumTracks(networkAlbumTracks: NetworkAlbumTracks):AlbumTracks{
+            return AlbumTracks(
+                mapListNetworkAlbumTracksData(networkAlbumTracks.data),
+                networkAlbumTracks.total
+            )
+        }
+
+        private fun mapNetworkDataToAlbumData(networkAlbumData: NetworkAlbum.NetworkAlbumData): Album.AlbumData {
+            return Album.AlbumData(
+                networkAlbumData.id,
+                networkAlbumData.title,
+                networkAlbumData.cover,
+                networkAlbumData.tracklist,
+                mapNetworkArtistToArtist(networkAlbumData.artist)
+            )
+        }
+
+        private fun mapNetworkDataToDataModel(networkData: NetworkPlaylist.NetworkData): Playlist.Data {
+            return Playlist.Data(
+                networkData.title,
+                networkData.nbTracks,
+                networkData.picture,
+                networkData.tracklist
+            )
+        }
+
+        private fun mapNetworkArtistToArtist(networkArtist: NetworkAlbum.NetworkAlbumData.NetworkArtist): Album.AlbumData.Artist {
+            return Album.AlbumData.Artist(
+                networkArtist.name,
+                networkArtist.picture,
+                networkArtist.link,
+                networkArtist.tracklist
+            )
+        }
+
+        private fun mapNetworkAlbumTracksData(network: NetworkAlbumTracks.NetworkAlbumTracksData): AlbumTracks.AlbumTracksData {
+            return AlbumTracks.AlbumTracksData(
+                mapNetworkArtistToArtist(network.artist),
+                network.id,
+                network.title,
+                network.preview
+            )
+        }
+
+        private fun mapListNetworkAlbumTracksData(network: List<NetworkAlbumTracks.NetworkAlbumTracksData>): List<AlbumTracks.AlbumTracksData> =
+            network.map { mapNetworkAlbumTracksData(it) }
+
+        private fun mapListNetworkDataToListData(listNetworkData: List<NetworkPlaylist.NetworkData>): List<Playlist.Data> =
+            listNetworkData.map { mapNetworkDataToDataModel(it) }
+
+        private fun mapListNetworkAlbumDataToListAlbumData(listAlbum: List<NetworkAlbum.NetworkAlbumData>): List<Album.AlbumData> =
+            listAlbum.map { mapNetworkDataToAlbumData(it) }
 
 
         //DB MAPPING
@@ -74,7 +91,6 @@ class ModelMapper {
             )
         }
 
-        //ERROR HERE
         fun mapDBTopAlbumsToAlbumModel(dbTopAlbums: DBTopAlbums): Album {
             return Album(
                 dbTopAlbums.listOfAlbums,

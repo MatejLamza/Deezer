@@ -1,16 +1,12 @@
 package com.example.deezer.data.repositories
 
-import android.util.Log
-import android.view.Display
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.deezer.data.database.DeezerDAO
 import com.example.deezer.data.network.DeezerDataSource
 import com.example.internals.ModelMapper
-import com.example.models.NetworkGenre
-import com.example.models.NetworkPlaylist
+import com.example.models.dbmodels.DBPlaylist
 import com.example.models.dbmodels.DBTopAlbums
 import com.example.models.domain.Album
+import com.example.models.domain.AlbumTracks
 import com.example.models.domain.Genre
 import com.example.models.domain.Playlist
 import kotlinx.coroutines.*
@@ -25,13 +21,19 @@ class APIRepositoryImpl
 
     //This class doesent have life cycle so we don't have to be worried about this repo being destroyed
     init {
+
         deezerDS.downloadedTopAlbums.observeForever {
-            //TODO Mapping then persisting
-            //Check if null
             if (it != null) {
                 persistFetchedTopAlbums(ModelMapper.mapNetworkAlbumToDBAlbum(it))
             }
         }
+    }
+
+    override suspend fun fetchAlbumTracks(albumID: Int): AlbumTracks {
+     return withContext(Dispatchers.Main){
+         deezerDS.fetchAlbumTracks(albumID)
+         return@withContext ModelMapper.mapNetworkAlbumTracks(deezerDS.downloadedTracks.value!!)
+     }
     }
 
     override suspend fun fetchGenreByID(genreID: Int): Genre {
@@ -57,6 +59,8 @@ class APIRepositoryImpl
         }
     }
 
+
+    //Check if date of fetched data is older then 24 hours if it is fetch data from api else fetch from room
     private suspend fun initTopAlbumsData() {
         //TODO Get Last Time fetched
         if (isFetchNeeded(ZonedDateTime.now().minusHours(1))) {
@@ -75,6 +79,12 @@ class APIRepositoryImpl
     private fun persistFetchedTopAlbums(dbTopAlbums: DBTopAlbums) {
         GlobalScope.launch(Dispatchers.IO) {
             deezerDAO.upsertTopAlbums(dbTopAlbums)
+        }
+    }
+
+    private fun persistFetchedPlaylists(dbPlaylist: DBPlaylist) {
+        GlobalScope.launch(Dispatchers.IO) {
+            deezerDAO.upsertPlaylists(dbPlaylist)
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.deezer.data.network.services.DeezerService
 import com.example.deezer.utils.NoConnectivityException
 import com.example.models.NetworkAlbum
+import com.example.models.NetworkAlbumTracks
 import com.example.models.NetworkGenre
 import com.example.models.NetworkPlaylist
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +17,13 @@ import javax.inject.Inject
 class DeezerDataSourceImpl
 @Inject constructor(val deezerService: DeezerService) : DeezerDataSource {
 
+    private val _downloadedTracks = MutableLiveData<NetworkAlbumTracks>()
     private val _downloadedPlaylist = MutableLiveData<NetworkPlaylist>()
     private val _downloadedTopAlbums = MutableLiveData<NetworkAlbum>()
     private val _downloadedGenre = MutableLiveData<NetworkGenre>()
+
+    override val downloadedTracks: LiveData<NetworkAlbumTracks>
+        get() = _downloadedTracks
 
     override val downloadedGenre: LiveData<NetworkGenre>
         get() = _downloadedGenre
@@ -31,9 +36,21 @@ class DeezerDataSourceImpl
     //requesting downloaded Playlists cant change the value. The only place where we can change value of downloaded data
     //is here in DataSourceImplementation
 
+    override suspend fun fetchAlbumTracks(idAlbum: Int) {
+        try {
+            withContext(Dispatchers.IO) {
+                val fetchedTracks = deezerService.fetchTracksForGivenAlbum(idAlbum).await()
+                _downloadedTracks.postValue(fetchedTracks)
+            }
+        } catch (e: NoConnectivityException) {
+            Timber.d("Error fetching tracks, no connection!")
+        }
+    }
+
+    //while fetching data from api set DateTime Fetched
     override suspend fun fetchGenreByID(idGenre: Int) {
         try {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 val fetchedGenre = deezerService.fetchGenreById(idGenre).await()
                 _downloadedGenre.postValue(fetchedGenre)
             }
@@ -42,10 +59,9 @@ class DeezerDataSourceImpl
         }
     }
 
-    //TODO delete after debugging
     override suspend fun fetchTopAlbums() {
         try {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 val fetchedTopAlbums = deezerService.fetchTopAlbums().await()
                 _downloadedTopAlbums.postValue(fetchedTopAlbums)
             }
@@ -56,7 +72,7 @@ class DeezerDataSourceImpl
 
     override suspend fun fetchPlaylist() {
         try {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 val fetchedNetworkPlaylist = deezerService.fetchPlaylists().await()
                 _downloadedPlaylist.postValue(fetchedNetworkPlaylist)
             }
